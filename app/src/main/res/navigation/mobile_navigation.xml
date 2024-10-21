@@ -14,12 +14,12 @@
     <fragment
         android:id="@+id/navigation_dashboard"
         android:name="com.cyberiyke.newsApp.ui.favourite.FavouriteFragment"
-        android:label="@string/title_dashboard"
+        android:label="@string/title_favourite"
         tools:layout="@layout/fragment_favourite" />
 
     <fragment
         android:id="@+id/navigation_notifications"
         android:name="com.cyberiyke.newsApp.ui.settings.SettingsFragment"
-        android:label="@string/title_notifications"
+        android:label="@string/title_settings"
         tools:layout="@layout/fragment_settings" />
 </navigation>
