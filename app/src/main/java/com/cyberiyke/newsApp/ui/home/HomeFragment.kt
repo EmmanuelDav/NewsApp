@@ -8,7 +8,10 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.cyberiyke.newsApp.databinding.FragmentHomeBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+
+@AndroidEntryPoint
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
