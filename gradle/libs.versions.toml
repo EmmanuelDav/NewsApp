@@ -2,6 +2,8 @@
 agp = "8.7.1"
 coil = "2.4.0"
 converterGson = "2.9.0"
+firebaseAnalytics = "22.1.2"
+firebaseCrashlytics = "19.2.1"
 glideVersion = "4.16.0"
 hiltAndroid = "2.51"
 kotlin = "1.9.24"
@@ -19,6 +21,7 @@ navigationFragmentKtx = "2.8.3"
 navigationUiKtx = "2.8.3"
 hilt = "2.51"
 roomKtx = "2.6.1"
+timber = "5.0.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -28,6 +31,8 @@ androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "
 coil = { module = "io.coil-kt:coil", version.ref = "coil" }
 compiler = { module = "com.github.bumptech.glide:compiler", version.ref = "glideVersion" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
+firebase-analytics = { module = "com.google.firebase:firebase-analytics", version.ref = "firebaseAnalytics" }
+firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics", version.ref = "firebaseCrashlytics" }
 github-glide = { module = "com.github.bumptech.glide:glide", version.ref = "glideVersion" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
 hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroid" }
@@ -44,6 +49,7 @@ androidx-lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifec
 androidx-navigation-fragment-ktx = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigationFragmentKtx" }
 androidx-navigation-ui-ktx = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "navigationUiKtx" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "converterGson" }
+timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

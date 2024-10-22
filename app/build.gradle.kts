@@ -61,13 +61,20 @@ dependencies {
     implementation(libs.androidx.room.ktx)
 
 
+    // Timber logging
+    implementation (libs.timber)
+
+
+    // Firebase Crashlytics
+    implementation (libs.firebase.crashlytics)
+    implementation (libs.firebase.analytics)
+
     // glide
     implementation (libs.github.glide)
     kapt (libs.compiler)
 
     // coil
     implementation (libs.coil)
-
     kapt(libs.androidx.room.compiler)
 
     //Coroutines

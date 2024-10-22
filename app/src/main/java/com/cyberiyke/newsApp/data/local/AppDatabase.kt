@@ -8,4 +8,8 @@ import androidx.room.RoomDatabase
 abstract class AppDatabase: RoomDatabase() {
 
     abstract fun getArticleDao(): ArticleDao
+
+    companion object {
+        const val DATABASE_NAME = "news_app_db" // Centralized database name
+    }
 }

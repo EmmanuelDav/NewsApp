@@ -23,7 +23,7 @@ interface ArticleDao {
     @Delete
     fun deleteArticle(article: ArticleEntity)
 
-    // Optionally, check if an article is already in the favorites based on its unique ID
+    // check if an article is already in the favorites based on its unique ID
     @Query("SELECT COUNT(*) FROM FAVOURITE_ARTICLE WHERE id = :articleId")
     fun isArticleFavorited(articleId: Int): Int // Returns the count (1 if present, 0 if not)
 }
