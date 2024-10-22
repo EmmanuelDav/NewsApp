@@ -1,4 +1,6 @@
 package com.cyberiyke.newsApp.data.repository
 
-class ArticleRepository {
+import javax.inject.Inject
+
+class ArticleRepository @Inject constructor(){
 }

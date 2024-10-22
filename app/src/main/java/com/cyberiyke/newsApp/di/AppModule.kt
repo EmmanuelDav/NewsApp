@@ -4,7 +4,7 @@ import android.content.Context
 import android.util.Log
 import androidx.room.Room
 import com.cyberiyke.newsApp.data.local.AppDatabase
-import com.cyberiyke.newsApp.data.network.RetrofitClient
+import com.cyberiyke.newsApp.data.network.ApiService
 import com.google.firebase.crashlytics.BuildConfig
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import dagger.Module
@@ -94,5 +94,11 @@ object AppModule {
                 FirebaseCrashlytics.getInstance().recordException(t)
             }
         }
+    }
+
+    @Provides
+    @Singleton
+    fun provideApiService(retrofit: Retrofit):ApiService{
+        return retrofit.create(ApiService::class.java)
     }
 }
