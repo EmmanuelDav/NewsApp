@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.cyberiyke.newsApp.R
 import com.cyberiyke.newsApp.databinding.FragmentHomeBinding
@@ -33,13 +34,14 @@ class HomeFragment : Fragment() {
 
     // This property is only valid between onCreateView and
     // onDestroyView.
-    private lateinit var shimmerFrameLayout: ShimmerFrameLayout
 
 
     private val binding get() = _binding!!
     private lateinit var homeViewModel: HomeViewModel
 
-    private val homeAdapter = ArticlesAdapter {}
+
+    private lateinit var homeAdapter: ArticlesAdapter
+
 
 
     override fun onCreateView(
@@ -83,14 +85,24 @@ class HomeFragment : Fragment() {
         binding.searchView.addTransitionListener { searchView, previousState, newState ->
             if (newState === TransitionState.SHOWING) {
                 (activity as MainActivity).setBottomNavigationVisibility(true)
-
             } else {
                 (activity as MainActivity).setBottomNavigationVisibility(false)
-                homeAdapter.exitSearchMode()
             }
         }
 
         searchFromApi()
+        setUpOnclickListener()
+    }
+
+    private fun setUpOnclickListener(){
+
+         homeAdapter = ArticlesAdapter {
+
+             val bundle = Bundle().apply {
+                 putString("url", it.articleUrl) // Pass the article URL
+             }
+             findNavController().navigate(R.id.action_navigation_home_to_newsItemFragment, bundle)
+         }
     }
 
     private fun searchFromApi(){
@@ -126,6 +138,5 @@ class HomeFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
 
 }

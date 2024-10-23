@@ -37,6 +37,7 @@ class ArticlesAdapter(private val listener: ((ArticleEntity) -> Unit)? = null) :
 
     fun exitSearchMode() {
         isSearchMode = false
+        searchResultsList.clear()
         notifyDataSetChanged()
     }
 
