@@ -42,6 +42,7 @@ class ArticleRepository @Inject constructor(
                              articleTitle = article.title?:"",
                              articleDescription = article.description?:"",
                              articleUrl = article.url?:"",
+                             publisedAt = article.publishedAt?:"",
                              articleDateTime = article.publishedAt?:"",
                              articleUrlToImage = article.urlToImage?:"",
                              articleSource = article.source.name,
@@ -79,6 +80,7 @@ class ArticleRepository @Inject constructor(
                         articleTitle = article.title ?: "",
                         articleDescription = article.description ?: "",
                         articleUrl = article.url ?: "",
+                        publisedAt = article.publishedAt?:"",
                         articleDateTime = article.publishedAt ?: "",
                         articleUrlToImage = article.urlToImage ?: "",
                         articleSource = article.source.name,
@@ -103,8 +105,8 @@ class ArticleRepository @Inject constructor(
         return articleDao.getAllArticles()
     }
 
-    fun updateFavoriteStatus(articleId: Int, isFavourite:Boolean){
-      //  articleDao.updateFavoriteStatus(articleId, isFavourite)
+    suspend fun updateFavoriteStatus(articleId: Int, isFavourite:Boolean){
+        articleDao.updateFavoriteStatus(articleId, isFavourite)
     }
 
     fun getFavouriteArticle():LiveData<List<ArticleEntity>>{

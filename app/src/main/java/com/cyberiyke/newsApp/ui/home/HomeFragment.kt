@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.SearchView
+import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -64,14 +65,14 @@ class HomeFragment : Fragment() {
         homeViewModel.article.observe(viewLifecycleOwner) { news ->
             binding.rvPreachings.layoutManager = LinearLayoutManager(activity)
             binding.rvPreachings.adapter = homeAdapter
-
-            if (news != null) homeAdapter.articleMutableList = news.toMutableList()
-
+            if (news != null) homeAdapter.articles = news.toMutableList()
 
         }
 
         homeViewModel.searchResults.observe(viewLifecycleOwner){ results ->
-            if (results != null) homeAdapter.filterList(results.toMutableList())
+            if (results != null) homeAdapter.setSearchResults(results.toMutableList())
+            binding.rvResults.adapter = homeAdapter
+
         }
 
         lifecycleScope.launch {
@@ -85,7 +86,7 @@ class HomeFragment : Fragment() {
 
             } else {
                 (activity as MainActivity).setBottomNavigationVisibility(false)
-
+                homeAdapter.exitSearchMode()
             }
         }
 
@@ -94,8 +95,6 @@ class HomeFragment : Fragment() {
 
     private fun searchFromApi(){
         binding.rvResults.layoutManager = LinearLayoutManager(activity)
-        binding.rvResults.adapter = homeAdapter
-
         binding.searchView.editText.apply {
 
             addTextChangedListener(object : TextWatcher {
@@ -127,5 +126,6 @@ class HomeFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
 
 }

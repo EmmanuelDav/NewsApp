@@ -11,6 +11,7 @@ data class ArticleEntity(
 
     var articleUrl: String = "",
     var articleTitle: String = "",
+    var publisedAt: String= "",
     var articleDescription: String = "",
     var articleDateTime: String = "",
     var articleSource: String = "",

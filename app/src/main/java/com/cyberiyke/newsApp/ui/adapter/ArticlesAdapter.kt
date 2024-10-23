@@ -14,34 +14,49 @@ import com.cyberiyke.newsApp.databinding.LayoutItemNewsBinding
  */
 class ArticlesAdapter(private val listener: ((ArticleEntity) -> Unit)? = null) : RecyclerView.Adapter<ArticlesAdapter.HomeViewHolder>() {
 
-    var articleMutableList = mutableListOf<ArticleEntity>()
+    private var mainArticleList = mutableListOf<ArticleEntity>()
+    private var searchResultsList = mutableListOf<ArticleEntity>()
+    private var isSearchMode = false
+
+
+    var articles: List<ArticleEntity>
+        get() = if (isSearchMode) searchResultsList else mainArticleList
         set(value) {
-            field.clear()
-            field.addAll(value)
-            notifyDataSetChanged()
+            mainArticleList = value.toMutableList() // Update main article list
+            if (!isSearchMode) {
+                notifyDataSetChanged() // Refresh only if not in search mode
+            }
         }
 
-    fun filterList(preachingList : MutableList<ArticleEntity>){
-        articleMutableList = preachingList
+    // Method to set search results and switch to search mode
+    fun setSearchResults(results: List<ArticleEntity>) {
+        searchResultsList = results.toMutableList()
+        isSearchMode = true
         notifyDataSetChanged()
     }
+
+    fun exitSearchMode() {
+        isSearchMode = false
+        notifyDataSetChanged()
+    }
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeViewHolder {
         val view = LayoutItemNewsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return HomeViewHolder(view)
     }
 
-    override fun getItemCount() = articleMutableList.count()
+    override fun getItemCount() = articles.count()
 
     override fun onBindViewHolder(holder: HomeViewHolder, position: Int) {
-        holder.bind(articleMutableList[position])
+        holder.bind(articles[position])
     }
 
     inner class HomeViewHolder(private val binding: LayoutItemNewsBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(article: ArticleEntity) = with(itemView) {
             binding.articleTitle.text = article.articleTitle
             binding.articleDescription.text = article.articleDescription
-          //  binding.articleDateTime.text = article.publishedAt
+            binding.articleDateTime.text = article.publisedAt
             binding.articleSource.text = article.articleSource
             Glide.with(this)
                 .load(article.articleUrlToImage)
@@ -49,7 +64,7 @@ class ArticlesAdapter(private val listener: ((ArticleEntity) -> Unit)? = null) :
                 .error(R.drawable.img_placeholder)
                 .into(binding.articleImage)
             setOnClickListener {
-                listener?.invoke(articleMutableList[layoutPosition])
+                listener?.invoke(articles[layoutPosition])
             }
         }
     }
