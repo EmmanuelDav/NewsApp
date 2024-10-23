@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.konan.properties.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -9,6 +11,8 @@ android {
     namespace = "com.cyberiyke.newsApp"
     compileSdk = 34
 
+
+
     defaultConfig {
         applicationId = "com.cyberiyke.newsApp"
         minSdk = 24
@@ -19,6 +23,13 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    // Load API key from local.properties
+    val localProperties = Properties().apply {
+        load(file("local.properties").inputStream())
+    }
+    val apiKey = localProperties["API_KEY"]?.toString() ?: ""
+
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -27,6 +38,14 @@ android {
                 "proguard-rules.pro"
             )
         }
+
+        getByName("release") {
+            buildConfigField("String", "API_KEY", "\"$apiKey\"")
+        }
+        getByName("debug") {
+            buildConfigField("String", "API_KEY", "\"$apiKey\"")
+        }
+
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11

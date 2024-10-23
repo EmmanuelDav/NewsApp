@@ -80,7 +80,7 @@
             android:layout_marginTop="8dp"
             android:text="Source"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@color/renk2"
+            android:textColor="@color/alert"
             android:textSize="10sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"

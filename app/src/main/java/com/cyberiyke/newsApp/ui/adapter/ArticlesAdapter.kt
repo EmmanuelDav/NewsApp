@@ -5,23 +5,24 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.cyberiyke.newsApp.R
+import com.cyberiyke.newsApp.data.local.ArticleEntity
 import com.cyberiyke.newsApp.data.model.Article
 import com.cyberiyke.newsApp.databinding.LayoutItemNewsBinding
 
 /**
  * Created by Emmanuel Iyke  on 3/7/2024.
  */
-class ArticlesAdapter(private val listener: ((Article) -> Unit)? = null) : RecyclerView.Adapter<ArticlesAdapter.HomeViewHolder>() {
+class ArticlesAdapter(private val listener: ((ArticleEntity) -> Unit)? = null) : RecyclerView.Adapter<ArticlesAdapter.HomeViewHolder>() {
 
-    var moviesList = mutableListOf<Article>()
+    var articleMutableList = mutableListOf<ArticleEntity>()
         set(value) {
             field.clear()
-            moviesList.addAll(value)
+            articleMutableList.addAll(value)
             notifyDataSetChanged()
         }
 
-    fun filterList(preachingList : MutableList<Article>){
-        moviesList = preachingList
+    fun filterList(preachingList : MutableList<ArticleEntity>){
+        articleMutableList = preachingList
         notifyDataSetChanged()
     }
 
@@ -30,25 +31,25 @@ class ArticlesAdapter(private val listener: ((Article) -> Unit)? = null) : Recyc
         return HomeViewHolder(view)
     }
 
-    override fun getItemCount() = moviesList.count()
+    override fun getItemCount() = articleMutableList.count()
 
     override fun onBindViewHolder(holder: HomeViewHolder, position: Int) {
-        holder.bind(moviesList[position])
+        holder.bind(articleMutableList[position])
     }
 
     inner class HomeViewHolder(private val binding: LayoutItemNewsBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(article: Article) = with(itemView) {
-            binding.articleTitle.text = article.title
-            binding.articleDescription.text = article.description
-            binding.articleDateTime.text = article.publishedAt
-            binding.articleSource.text = article.source.name
+        fun bind(article: ArticleEntity) = with(itemView) {
+            binding.articleTitle.text = article.articleTitle
+            binding.articleDescription.text = article.articleDescription
+          //  binding.articleDateTime.text = article.publishedAt
+            binding.articleSource.text = article.articleSource
             Glide.with(this)
-                .load(article.urlToImage)
+                .load(article.articleUrlToImage)
                 .placeholder(R.drawable.img_placeholder)
                 .error(R.drawable.img_placeholder)
                 .into(binding.articleImage)
             setOnClickListener {
-                listener?.invoke(moviesList[layoutPosition])
+                listener?.invoke(articleMutableList[layoutPosition])
             }
         }
     }
