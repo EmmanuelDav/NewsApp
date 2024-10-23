@@ -93,6 +93,10 @@ dependencies {
     implementation (libs.github.glide)
     kapt (libs.compiler)
 
+    //facebook shimmer
+    implementation (libs.shimmer)
+
+
     //lifecycle
     implementation (libs.androidx.lifecycle.runtime.ktx) // Use the latest version
 

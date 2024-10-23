@@ -11,11 +11,24 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import javax.inject.Inject
 
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(private val repository: ArticleRepository): ViewModel() {
+
+
+    var article = repository.getCachedArticles()
+
+    private val _searchResults = MutableLiveData<List<ArticleEntity>>() // search results
+    val searchResults: LiveData<List<ArticleEntity>> get() = _searchResults
+
+    private val _isLoading = MutableLiveData<Boolean>()     // Loading state to track API call progress
+    val isLoading: LiveData<Boolean> = _isLoading
+
+    private val _errorMessage = MutableLiveData<String?>()     // Error handling state
+    val errorMessage: LiveData<String?>  = _errorMessage
 
 
 
@@ -25,10 +38,28 @@ class HomeViewModel @Inject constructor(private val repository: ArticleRepositor
         }
     }
 
-    suspend fun getNews(): List<ArticleEntity>{
-        return withContext(Dispatchers.IO) {
-            repository.getCachedArticles()
+    // this function conducts the seatch based on users input
+    fun searchArticles(
+        query: String,
+        sources: String? = null,
+        from: String? = null,
+        language: String = "en",
+        sortBy: String = "publishedAt",
+        pageSize: Int = 20,
+        page: Int = 1
+    ) {
+        viewModelScope.launch {
+            _isLoading.value = true
+            try {
+                val results = repository.searchArticles(query, sources, from, language, sortBy, pageSize, page)
+                _searchResults.value = results
+            } catch (e: Exception) {
+                _errorMessage.value = "Failed to fetch articles: ${e.message}"
+                Timber.e(e, "Error during article search")
+            } finally {
+                _isLoading.value = false
+            }
         }
     }
-
 }
+

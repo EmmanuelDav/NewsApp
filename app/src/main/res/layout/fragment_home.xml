@@ -30,9 +30,8 @@
             android:id="@+id/search_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Search All Topics"
-            app:forceDefaultNavigationOnClickListener="false"
-            app:navigationIcon="@drawable/baseline_menu_24" />
+            android:hint="Search All News"
+            app:forceDefaultNavigationOnClickListener="false"/>
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -54,6 +53,8 @@
             tools:listitem="@layout/layout_item_news" />
 
     </com.google.android.material.search.SearchView>
+
+
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

@@ -1,6 +1,7 @@
 package com.cyberiyke.newsApp.ui
 
 import android.os.Bundle
+import android.view.View
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
@@ -32,6 +33,12 @@ class MainActivity : AppCompatActivity() {
                 R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications
             )
         )
+
+
         navView.setupWithNavController(navController)
+    }
+
+    fun setBottomNavigationVisibility(visible: Boolean) {
+        binding.navView.visibility = if (visible) View.VISIBLE else View.GONE
     }
 }

@@ -49,6 +49,7 @@ class ArticleRepository @Inject constructor(
                          )
                      }
                      Timber.d("Inserting ${articleEntities.size} articles into the database")
+                     articleDao.clearNonFavoriteData()
                      articleDao.insertArticle(articleEntities)
                  }
              }
@@ -58,9 +59,47 @@ class ArticleRepository @Inject constructor(
          }
     }
 
+
+    suspend fun searchArticles(
+        query: String,
+        sources: String? = null,
+        from: String? = null,
+        language: String = "en",
+        sortBy: String = "publishedAt",
+        pageSize: Int = 20,
+        page: Int = 1
+    ): List<ArticleEntity> {
+        // Fetch from the API
+        val response = apiService.getEveryThing(query, sources, from, language, sortBy, pageSize, page)
+
+        return try {
+            if (response.isSuccessful) {
+                response.body()?.articles?.map { article ->
+                    ArticleEntity(
+                        articleTitle = article.title ?: "",
+                        articleDescription = article.description ?: "",
+                        articleUrl = article.url ?: "",
+                        articleDateTime = article.publishedAt ?: "",
+                        articleUrlToImage = article.urlToImage ?: "",
+                        articleSource = article.source.name,
+                        isFavorite = false
+                    )
+                } ?: emptyList()
+            } else {
+                Timber.e("Error: ${response.code()} - ${response.message()}")
+                emptyList()
+            }
+        } catch (e: Exception) {
+            Timber.e(e, "Error occurred while searching articles")
+            emptyList()
+        }
+    }
+
+
+
     // Fetch cached articles when offline
-    fun getCachedArticles(): List<ArticleEntity> {
-        Timber.tag("meme").d("getCachedArticles: ${articleDao.getAllArticles()}")
+    fun getCachedArticles(): LiveData<List<ArticleEntity>> {
+        Timber.tag("meme").d("getCachedArticles: ${articleDao.getAllArticles().value}")
         return articleDao.getAllArticles()
     }
 

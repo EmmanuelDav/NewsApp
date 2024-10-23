@@ -15,10 +15,10 @@ interface ArticleDao {
     suspend fun insertArticle(article: List<ArticleEntity>)
 
     @Query("SELECT * FROM favourite_article ORDER BY id DESC")
-    fun getAllArticles(): List<ArticleEntity>
+    fun getAllArticles(): LiveData<List<ArticleEntity>>
 
-    @Delete
-    suspend fun deleteArticle(article: ArticleEntity)
+    @Query("DELETE FROM favourite_article WHERE isFavorite = 0")     // Delete only non-favorited articles
+    suspend fun clearNonFavoriteData()
 
     @Query("SELECT * FROM favourite_article WHERE isFavorite = 1") // the one value is when the isfavourite is true
     fun getFavoriteArticles():LiveData<List<ArticleEntity>>
