@@ -1,9 +1,9 @@
 package com.cyberiyke.newsApp.data.network
 
-import androidx.room.Query
 import com.cyberiyke.newsApp.data.model.NewsResponse
 import okhttp3.Response
 import retrofit2.http.GET
+import retrofit2.http.Query
 import java.util.*
 
 interface ApiService {

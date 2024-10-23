@@ -1,4 +1,4 @@
-import org.jetbrains.kotlin.konan.properties.Properties
+import java.util.Properties
 
 plugins {
     alias(libs.plugins.android.application)
@@ -25,7 +25,7 @@ android {
 
     // Load API key from local.properties
     val localProperties = Properties().apply {
-        load(file("local.properties").inputStream())
+        load(file("../local.properties").inputStream())
     }
     val apiKey = localProperties["API_KEY"]?.toString() ?: ""
 
@@ -56,6 +56,7 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
 }
 
@@ -91,6 +92,10 @@ dependencies {
     // glide
     implementation (libs.github.glide)
     kapt (libs.compiler)
+
+    //lifecycle
+    implementation (libs.androidx.lifecycle.runtime.ktx) // Use the latest version
+
 
     // coil
     implementation (libs.coil)

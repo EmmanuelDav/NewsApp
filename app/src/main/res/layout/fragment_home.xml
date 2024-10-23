@@ -1,67 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:id="@+id/drawerLayout"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvPreachings"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fitsSystemWindows="true">
+        app:layout_behavior="@string/searchbar_scrolling_view_behavior"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:listitem="@layout/layout_item_news" />
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.search.SearchBar
+            android:id="@+id/search_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Search All Topics"
+            app:forceDefaultNavigationOnClickListener="false"
+            app:navigationIcon="@drawable/baseline_menu_24" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <com.google.android.material.search.SearchView
+        android:id="@+id/searchView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:hint="Search Preachings"
+        app:layout_anchor="@id/search_bar">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvPreachings"
+            android:id="@+id/rvResults"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="130dp"
-            app:layout_behavior="@string/searchbar_scrolling_view_behavior"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:listitem="@layout/layout_item_news" />
 
-        <com.google.android.material.appbar.AppBarLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fitsSystemWindows="true"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+    </com.google.android.material.search.SearchView>
 
-            <com.google.android.material.search.SearchBar
-                android:id="@+id/search_bar"
-                style="@style/Widget.Material3.SearchBar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Search All Topics"
-                app:forceDefaultNavigationOnClickListener="false"
-                app:navigationIcon="@drawable/baseline_menu_24" />
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-        </com.google.android.material.appbar.AppBarLayout>
-
-        <com.google.android.material.search.SearchView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/searchView"
-            android:hint="Search Preachings"
-            app:layout_anchor="@id/search_bar">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvResults"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:listitem="@layout/layout_item_news" />
-
-        </com.google.android.material.search.SearchView>
-
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
-</androidx.drawerlayout.widget.DrawerLayout>

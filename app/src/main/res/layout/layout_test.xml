@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+    <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!-- News block -->
+            <RelativeLayout
+                android:id="@+id/newsImageView"
+                android:layout_width="match_parent"
+                android:layout_height="180sp">
+
+                <ImageView
+                    android:id="@+id/newsImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:src="@drawable/img_placeholder" />
+
+                <TextView
+                    android:id="@+id/newsAuthor"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    tools:text="ABC News" />
+
+            </RelativeLayout>
+
+            <!-- News Title -->
+            <TextView
+                android:id="@+id/newsTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/newsImageView"
+                tools:text="Elon Musk says Tesla can't yet launch in India" />
+
+            <!-- Publish at -->
+            <TextView
+                android:id="@+id/newsPublishedAt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/newsTitle"
+                android:layout_marginStart="30dp"
+                android:layout_marginLeft="30dp"/>
+
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+

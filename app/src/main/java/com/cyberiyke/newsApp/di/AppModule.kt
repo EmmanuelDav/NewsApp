@@ -46,7 +46,7 @@ object AppModule {
             .addInterceptor{
                 chain ->
                 val request = chain.request().newBuilder()
-                    .addHeader("Authorization", "ApiKey")
+                    .addHeader("Authorization", com.cyberiyke.newsApp.BuildConfig.API_KEY)
                     .build()
                 chain.proceed(request)
             }

@@ -10,7 +10,6 @@ import androidx.lifecycle.ViewModelProvider
 import com.cyberiyke.newsApp.databinding.FragmentFavouriteBinding
 import dagger.hilt.android.AndroidEntryPoint
 
-@AndroidEntryPoint
 class FavouriteFragment : Fragment() {
 
     private var _binding: FragmentFavouriteBinding? = null

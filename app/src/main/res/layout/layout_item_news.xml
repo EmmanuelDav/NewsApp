@@ -16,26 +16,25 @@
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/articleImage"
-            android:layout_width="367dp"
+            android:layout_width="match_parent"
             android:layout_height="178dp"
             android:layout_margin="5dp"
             android:layout_marginTop="2dp"
             android:scaleType="center"
+            app:srcCompat="@drawable/img_placeholder"
             app:shapeAppearance="@style/CustomShapeAppearance"
-            android:src="@drawable/img_placeholder"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintWidth_percent="0.4" />
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/articleTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            android:fontFamily="sans-serif-medium"
             android:text="News Title"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textSize="14sp"
@@ -44,7 +43,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/articleSource" />
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/articleDescription"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -59,7 +58,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/articleTitle" />
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/articleDateTime"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -72,7 +71,7 @@
             app:layout_constraintEnd_toEndOf="@+id/articleTitle"
             app:layout_constraintTop_toBottomOf="@+id/articleImage" />
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/articleSource"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

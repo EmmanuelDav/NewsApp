@@ -7,12 +7,10 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.cyberiyke.newsApp.databinding.FragmentNotificationsBinding
 import com.cyberiyke.newsApp.databinding.FragmentSettingsBinding
 import dagger.hilt.android.HiltAndroidApp
 
 
-@HiltAndroidApp
 class SettingsFragment : Fragment() {
 
     private var _binding: FragmentSettingsBinding? = null
