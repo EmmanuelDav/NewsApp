@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 data class ArticleEntity(
 
     @PrimaryKey(autoGenerate = true)
-    var id: Int? = null, // Make ID nullable to let Room auto-generate it
+    var id: Int = 0,
 
     var articleUrl: String = "",
     var articleTitle: String = "",

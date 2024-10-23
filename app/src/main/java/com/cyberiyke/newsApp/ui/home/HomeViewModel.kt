@@ -1,5 +1,6 @@
 package com.cyberiyke.newsApp.ui.home
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -24,7 +25,7 @@ class HomeViewModel @Inject constructor(private val repository: ArticleRepositor
         }
     }
 
-    suspend fun getNews(): List<ArticleEntity> {
+    suspend fun getNews(): List<ArticleEntity>{
         return withContext(Dispatchers.IO) {
             repository.getCachedArticles()
         }

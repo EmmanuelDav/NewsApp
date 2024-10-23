@@ -14,7 +14,7 @@ interface ArticleDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertArticle(article: List<ArticleEntity>)
 
-    @Query("SELECT * FROM favourite_article ORDER BY articleDateTime DESC")
+    @Query("SELECT * FROM favourite_article ORDER BY id DESC")
     fun getAllArticles(): List<ArticleEntity>
 
     @Delete

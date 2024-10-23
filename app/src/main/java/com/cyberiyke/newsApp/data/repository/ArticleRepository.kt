@@ -39,7 +39,6 @@ class ArticleRepository @Inject constructor(
                  response.body()?.let { newsResponse ->
                      val articleEntities = newsResponse.articles.map { article ->
                          ArticleEntity(
-                             id = 0,
                              articleTitle = article.title?:"",
                              articleDescription = article.description?:"",
                              articleUrl = article.url?:"",
@@ -61,6 +60,7 @@ class ArticleRepository @Inject constructor(
 
     // Fetch cached articles when offline
     fun getCachedArticles(): List<ArticleEntity> {
+        Timber.tag("meme").d("getCachedArticles: ${articleDao.getAllArticles()}")
         return articleDao.getAllArticles()
     }
 

@@ -39,8 +39,8 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-         homeViewModel =
-             ViewModelProvider(this)[HomeViewModel::class.java]
+        homeViewModel =
+            ViewModelProvider(this)[HomeViewModel::class.java]
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         (activity as AppCompatActivity).setSupportActionBar(binding.searchBar)
@@ -52,18 +52,17 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.rvPreachings.layoutManager = LinearLayoutManager(activity)
         binding.rvPreachings.adapter = homeAdapter
-//        homeViewModel.article.observe(viewLifecycleOwner, Observer { news ->
+//        homeViewModel.articles.observe(viewLifecycleOwner) { news ->
 //            if (news != null) homeAdapter.articleMutableList = news.toMutableList()
-//        })
+//        }
 
         lifecycleScope.launch {
             val articles = homeViewModel.getNews()
             homeAdapter.articleMutableList = articles.toMutableList()
         }
 
-
-        lifecycleScope.launch{
-            homeViewModel.fetchArticle("us","technology","en", 20,1)
+        lifecycleScope.launch {
+            homeViewModel.fetchArticle("us", "technology", "en", 20, 1)
         }
 
     }

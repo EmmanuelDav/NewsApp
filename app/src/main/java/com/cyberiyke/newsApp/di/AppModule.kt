@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import androidx.room.Room
 import com.cyberiyke.newsApp.data.local.AppDatabase
+import com.cyberiyke.newsApp.data.local.MIGRATION_1_2
 import com.cyberiyke.newsApp.data.network.ApiService
 import com.google.firebase.crashlytics.BuildConfig
 import com.google.firebase.crashlytics.FirebaseCrashlytics
@@ -30,6 +31,7 @@ object AppModule {
     @Singleton
     fun provideDatabase(@ApplicationContext  context: Context): AppDatabase{
         return Room.databaseBuilder(context, AppDatabase::class.java, AppDatabase.DATABASE_NAME )
+            .addMigrations(MIGRATION_1_2)
             .fallbackToDestructiveMigration()
             .build()
     }
