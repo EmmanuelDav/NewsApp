@@ -17,7 +17,7 @@ class ArticlesAdapter(private val listener: ((ArticleEntity) -> Unit)? = null) :
     var articleMutableList = mutableListOf<ArticleEntity>()
         set(value) {
             field.clear()
-            articleMutableList.addAll(value)
+            field.addAll(value)
             notifyDataSetChanged()
         }
 

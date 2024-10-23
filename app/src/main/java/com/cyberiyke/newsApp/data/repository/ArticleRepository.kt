@@ -43,11 +43,12 @@ class ArticleRepository @Inject constructor(
                              articleDescription = article.description,
                              articleUrl = article.url,
                              articleDateTime = article.publishedAt,
-                             articleUrlToImage = article.urlToImage,
+                             articleUrlToImage = article.urlToImage?:"",
                              articleSource = article.source.name,
                              isFavorite = false
                          )
                      }
+                     Timber.d("Inserting ${articleEntities.size} articles into the database")
                      articleDao.insertArticle(articleEntities)
                  }
              }

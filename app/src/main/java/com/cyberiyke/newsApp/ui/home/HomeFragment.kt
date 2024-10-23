@@ -17,6 +17,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 
 
 @AndroidEntryPoint
@@ -39,7 +40,7 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
          homeViewModel =
-            ViewModelProvider(this)[HomeViewModel::class.java]
+             ViewModelProvider(this)[HomeViewModel::class.java]
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         (activity as AppCompatActivity).setSupportActionBar(binding.searchBar)
@@ -49,16 +50,20 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-
-        lifecycleScope.launch{ homeViewModel.fetchArticle("us","technology","en", 20,1)}
-
-
         binding.rvPreachings.layoutManager = LinearLayoutManager(activity)
         binding.rvPreachings.adapter = homeAdapter
-        homeViewModel.article.observe(viewLifecycleOwner, Observer {
-            homeAdapter.articleMutableList = it.toMutableList()
+        homeViewModel.fetchCachedArticles()
+
+        homeViewModel.articleLiveData.observe(viewLifecycleOwner, Observer { news ->
+            news.let {
+                homeAdapter.articleMutableList = news.toMutableList()
+            }
         })
+
+        lifecycleScope.launch{
+            homeViewModel.fetchArticle("us","technology","en", 20,1)
+        }
+
     }
 
     override fun onDestroyView() {
