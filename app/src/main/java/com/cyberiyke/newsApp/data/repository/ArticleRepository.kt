@@ -1,5 +1,6 @@
 package com.cyberiyke.newsApp.data.repository
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import com.cyberiyke.newsApp.data.local.ArticleDao
 import com.cyberiyke.newsApp.data.local.ArticleEntity
@@ -39,10 +40,10 @@ class ArticleRepository @Inject constructor(
                      val articleEntities = newsResponse.articles.map { article ->
                          ArticleEntity(
                              id = 0,
-                             articleTitle = article.title,
-                             articleDescription = article.description,
-                             articleUrl = article.url,
-                             articleDateTime = article.publishedAt,
+                             articleTitle = article.title?:"",
+                             articleDescription = article.description?:"",
+                             articleUrl = article.url?:"",
+                             articleDateTime = article.publishedAt?:"",
                              articleUrlToImage = article.urlToImage?:"",
                              articleSource = article.source.name,
                              isFavorite = false
@@ -59,12 +60,12 @@ class ArticleRepository @Inject constructor(
     }
 
     // Fetch cached articles when offline
-    fun getCachedArticles(): LiveData<List<ArticleEntity>> {
+    fun getCachedArticles(): List<ArticleEntity> {
         return articleDao.getAllArticles()
     }
 
     fun updateFavoriteStatus(articleId: Int, isFavourite:Boolean){
-        articleDao.updateFavoriteStatus(articleId, isFavourite)
+      //  articleDao.updateFavoriteStatus(articleId, isFavourite)
     }
 
     fun getFavouriteArticle():LiveData<List<ArticleEntity>>{

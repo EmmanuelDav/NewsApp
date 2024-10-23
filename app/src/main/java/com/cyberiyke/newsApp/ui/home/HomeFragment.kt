@@ -52,13 +52,15 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.rvPreachings.layoutManager = LinearLayoutManager(activity)
         binding.rvPreachings.adapter = homeAdapter
-        homeViewModel.fetchCachedArticles()
+//        homeViewModel.article.observe(viewLifecycleOwner, Observer { news ->
+//            if (news != null) homeAdapter.articleMutableList = news.toMutableList()
+//        })
 
-        homeViewModel.articleLiveData.observe(viewLifecycleOwner, Observer { news ->
-            news.let {
-                homeAdapter.articleMutableList = news.toMutableList()
-            }
-        })
+        lifecycleScope.launch {
+            val articles = homeViewModel.getNews()
+            homeAdapter.articleMutableList = articles.toMutableList()
+        }
+
 
         lifecycleScope.launch{
             homeViewModel.fetchArticle("us","technology","en", 20,1)
