@@ -14,7 +14,7 @@ data class ArticleEntity(
     var articleDescription: String = "",
     var articleDateTime: String = "",
     var articleSource: String = "",
-    var articleUrlToImage: String = ""
-
+    var articleUrlToImage: String = "",
+    var isFavorite : Boolean = false // checks if it is favourited
 
     )

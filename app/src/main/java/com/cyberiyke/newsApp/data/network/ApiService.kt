@@ -2,13 +2,14 @@ package com.cyberiyke.newsApp.data.network
 
 import androidx.room.Query
 import com.cyberiyke.newsApp.data.model.NewsResponse
+import okhttp3.Response
 import retrofit2.http.GET
 import java.util.*
 
 interface ApiService {
 
         @GET("/v2/top-headlines")
-        suspend fun top(
+        suspend fun getTopHeadline(
             @Query("country") country:String? = null,
             @Query("category") category:String? = null,
             @Query("language") language:String = "en",
@@ -17,11 +18,12 @@ interface ApiService {
             @Query("pageSize") pageSize: Int = 20, // Added default value
             @Query("page") page: Int = 1 // Added default value
 
-        ): NewsResponse
+        ): retrofit2.Response<NewsResponse>
 
 
+        // for searching
         @GET("/v2/everything")
-        suspend fun everyThing(
+        suspend fun getEveryThing(
             @Query("q") query: String,
             @Query("sources") sources: String? = null,
             @Query("from") from:String? = null,
@@ -29,6 +31,6 @@ interface ApiService {
             @Query("sortBy") sortBy:String = "publishedAt",
             @Query("pageSize") pageSize: Int = 20, // Added default value
             @Query("page") page: Int = 1 // Added default value
-        ):NewsResponse
+        ): retrofit2.Response<NewsResponse>
 
 }
