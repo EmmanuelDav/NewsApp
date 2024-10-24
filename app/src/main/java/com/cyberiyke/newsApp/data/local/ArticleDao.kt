@@ -14,7 +14,7 @@ interface ArticleDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertArticle(article: List<ArticleEntity>)
 
-    @Query("SELECT * FROM favourite_article ORDER BY id DESC")
+    @Query("SELECT * FROM favourite_article ORDER BY articleDateTime DESC")
     fun getAllArticles(): LiveData<List<ArticleEntity>>
 
     @Query("DELETE FROM favourite_article WHERE isFavorite = 0")     // Delete only non-favorited articles

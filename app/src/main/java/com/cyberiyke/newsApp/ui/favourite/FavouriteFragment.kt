@@ -7,12 +7,22 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.cyberiyke.newsApp.R
 import com.cyberiyke.newsApp.databinding.FragmentFavouriteBinding
+import com.cyberiyke.newsApp.ui.adapter.ArticlesAdapter
+import com.cyberiyke.newsApp.ui.home.HomeFragment
 import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class FavouriteFragment : Fragment() {
 
     private var _binding: FragmentFavouriteBinding? = null
+    private lateinit var favouriteViewModel:FavouriteViewModel
+    private lateinit var homeAdapter: ArticlesAdapter<FavouriteViewModel>
+
+
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -23,17 +33,33 @@ class FavouriteFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val favouriteViewModel =
+         favouriteViewModel =
             ViewModelProvider(this)[FavouriteViewModel::class.java]
 
         _binding = FragmentFavouriteBinding.inflate(inflater, container, false)
         val root: View = binding.root
-
-        val textView: TextView = binding.textDashboard
-        favouriteViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
-        }
         return root
+    }
+
+    private fun adapter(){
+         homeAdapter = ArticlesAdapter(favouriteViewModel, {
+            val bundle = Bundle().apply {
+                putString("url", it.articleUrl) // Pass the article URL
+            }
+            findNavController().navigate(R.id.action_navigation_dashboard_to_newsItemFragment, bundle)
+        })
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        favouriteViewModel.favourite.observe(viewLifecycleOwner) { news ->
+            binding.rv.layoutManager = LinearLayoutManager(activity)
+            binding.rv.adapter = homeAdapter
+            if (news != null) homeAdapter.articles = news.toMutableList()
+
+        }
+        adapter()
     }
 
     override fun onDestroyView() {

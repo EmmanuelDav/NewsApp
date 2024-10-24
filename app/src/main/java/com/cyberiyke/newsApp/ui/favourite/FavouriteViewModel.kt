@@ -3,13 +3,13 @@ package com.cyberiyke.newsApp.ui.favourite
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.cyberiyke.newsApp.data.repository.ArticleRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
 
-class FavouriteViewModel : ViewModel() {
+@HiltViewModel
+class FavouriteViewModel  @Inject constructor(repository: ArticleRepository): ViewModel() {
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is dashboard Fragment"
-    }
-    val text: LiveData<String> = _text
+    var favourite = repository.getFavouriteArticle()
 }

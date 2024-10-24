@@ -40,7 +40,7 @@ class HomeFragment : Fragment() {
     private lateinit var homeViewModel: HomeViewModel
 
 
-    private lateinit var homeAdapter: ArticlesAdapter
+    private lateinit var homeAdapter: ArticlesAdapter<HomeViewModel>
 
 
 
@@ -72,8 +72,11 @@ class HomeFragment : Fragment() {
         }
 
         homeViewModel.searchResults.observe(viewLifecycleOwner){ results ->
-            if (results != null) homeAdapter.setSearchResults(results.toMutableList())
+            binding.rvResults.layoutManager = LinearLayoutManager(activity)
             binding.rvResults.adapter = homeAdapter
+
+
+            if (results != null) homeAdapter.setSearchResults(results.toMutableList())
 
         }
 
@@ -83,10 +86,11 @@ class HomeFragment : Fragment() {
 
 
         binding.searchView.addTransitionListener { searchView, previousState, newState ->
-            if (newState === TransitionState.SHOWING) {
-                (activity as MainActivity).setBottomNavigationVisibility(true)
-            } else {
-                (activity as MainActivity).setBottomNavigationVisibility(false)
+            when(newState){
+                TransitionState.SHOWING ->   (activity as MainActivity).setBottomNavigationVisibility(false)
+                TransitionState.HIDING -> (activity as MainActivity).setBottomNavigationVisibility(true)
+                TransitionState.HIDDEN -> (activity as MainActivity).setBottomNavigationVisibility(true)
+                TransitionState.SHOWN -> (activity as MainActivity).setBottomNavigationVisibility(false)
             }
         }
 
@@ -96,17 +100,16 @@ class HomeFragment : Fragment() {
 
     private fun setUpOnclickListener(){
 
-         homeAdapter = ArticlesAdapter {
+         homeAdapter = ArticlesAdapter( homeViewModel, {
 
              val bundle = Bundle().apply {
                  putString("url", it.articleUrl) // Pass the article URL
              }
              findNavController().navigate(R.id.action_navigation_home_to_newsItemFragment, bundle)
-         }
+         })
     }
 
     private fun searchFromApi(){
-        binding.rvResults.layoutManager = LinearLayoutManager(activity)
         binding.searchView.editText.apply {
 
             addTextChangedListener(object : TextWatcher {
@@ -138,5 +141,7 @@ class HomeFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
+
 
 }

@@ -38,6 +38,12 @@ class HomeViewModel @Inject constructor(private val repository: ArticleRepositor
         }
     }
 
+    fun updateToggle(articleId:Int, isFavourite:Boolean){
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.updateFavoriteStatus(articleId,isFavourite)
+        }
+    }
+
     // this function conducts the seatch based on users input
     fun searchArticles(
         query: String,

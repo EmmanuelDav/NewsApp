@@ -2,17 +2,22 @@ package com.cyberiyke.newsApp.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.cyberiyke.newsApp.R
 import com.cyberiyke.newsApp.data.local.ArticleEntity
 import com.cyberiyke.newsApp.data.model.Article
 import com.cyberiyke.newsApp.databinding.LayoutItemNewsBinding
+import com.cyberiyke.newsApp.ui.home.HomeViewModel
 
 /**
  * Created by Emmanuel Iyke  on 3/7/2024.
  */
-class ArticlesAdapter(private val listener: ((ArticleEntity) -> Unit)? = null) : RecyclerView.Adapter<ArticlesAdapter.HomeViewHolder>() {
+class ArticlesAdapter<T : ViewModel>(private val viewModel: T, private val listener: ((ArticleEntity) -> Unit)? = null)
+    : RecyclerView.Adapter<ArticlesAdapter<T>.HomeViewHolder>() {
 
     private var mainArticleList = mutableListOf<ArticleEntity>()
     private var searchResultsList = mutableListOf<ArticleEntity>()
@@ -59,6 +64,7 @@ class ArticlesAdapter(private val listener: ((ArticleEntity) -> Unit)? = null) :
             binding.articleDescription.text = article.articleDescription
             binding.articleDateTime.text = article.publisedAt
             binding.articleSource.text = article.articleSource
+            updateFavoriteIcon(article.isFavorite,binding)
             Glide.with(this)
                 .load(article.articleUrlToImage)
                 .placeholder(R.drawable.img_placeholder)
@@ -67,8 +73,30 @@ class ArticlesAdapter(private val listener: ((ArticleEntity) -> Unit)? = null) :
             setOnClickListener {
                 listener?.invoke(articles[layoutPosition])
             }
+            binding.favoriteButton.setOnClickListener {
+                val newFavState = !article.isFavorite
+                article.isFavorite = newFavState
+                if(viewModel is HomeViewModel) updateFavoriteIcon(newFavState, binding)
+
+                (viewModel as HomeViewModel).updateToggle(article.id, newFavState)
+            }
         }
     }
+
+    private fun updateFavoriteIcon(isFavorite: Boolean, binding: LayoutItemNewsBinding) {
+        if (isFavorite) {
+            binding.favoriteButton.icon = ContextCompat.getDrawable(
+                binding.root.context,
+                R.drawable.baseline_favorite_24
+            )
+        } else {
+            binding.favoriteButton.icon = ContextCompat.getDrawable(
+                binding.root.context,
+                R.drawable.baseline_favorite_border_24
+            )
+        }
+    }
+
 }
 
 
