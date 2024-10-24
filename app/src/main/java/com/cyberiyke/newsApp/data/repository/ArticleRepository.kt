@@ -61,6 +61,8 @@ class ArticleRepository @Inject constructor(
     }
 
 
+
+
     suspend fun searchArticles(
         query: String,
         sources: String? = null,
@@ -111,6 +113,10 @@ class ArticleRepository @Inject constructor(
 
     fun getFavouriteArticle():LiveData<List<ArticleEntity>>{
         return articleDao.getFavoriteArticles()
+    }
+
+    suspend fun insertSingle(articleEntity: ArticleEntity){
+        articleDao.insertArticle(listOf(articleEntity))
     }
 
 }

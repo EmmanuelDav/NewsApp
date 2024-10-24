@@ -11,6 +11,7 @@ import com.cyberiyke.newsApp.R
 import com.cyberiyke.newsApp.data.local.ArticleEntity
 import com.cyberiyke.newsApp.data.model.Article
 import com.cyberiyke.newsApp.databinding.LayoutItemNewsBinding
+import com.cyberiyke.newsApp.ui.favourite.FavouriteViewModel
 import com.cyberiyke.newsApp.ui.home.HomeViewModel
 
 /**
@@ -76,9 +77,15 @@ class ArticlesAdapter<T : ViewModel>(private val viewModel: T, private val liste
             binding.favoriteButton.setOnClickListener {
                 val newFavState = !article.isFavorite
                 article.isFavorite = newFavState
-                if(viewModel is HomeViewModel) updateFavoriteIcon(newFavState, binding)
+                updateFavoriteIcon(newFavState, binding)
 
-                (viewModel as HomeViewModel).updateToggle(article.id, newFavState)
+                if (viewModel is HomeViewModel){
+                    (viewModel as HomeViewModel).updateToggle(article.id, newFavState)
+                } else if (viewModel is FavouriteViewModel) {
+                    (viewModel as FavouriteViewModel).updateToggle(article.id, newFavState)
+                }
+
+                if (isSearchMode)  (viewModel as HomeViewModel).saveArticleFromSearch( newFavState, article)
             }
         }
     }

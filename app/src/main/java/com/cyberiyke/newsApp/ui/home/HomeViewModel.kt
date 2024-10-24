@@ -67,5 +67,12 @@ class HomeViewModel @Inject constructor(private val repository: ArticleRepositor
             }
         }
     }
+
+    fun saveArticleFromSearch(isFavourite: Boolean, article: ArticleEntity){
+        viewModelScope.launch (Dispatchers.IO){
+            repository.insertSingle(article)
+            repository.updateFavoriteStatus(article.id, isFavourite)
+        }
+    }
 }
 
