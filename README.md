@@ -36,6 +36,16 @@ You'll need to provide API key to fetch the news from the News Service (API). Cu
 - Build the app 
 - Enjoyyyyy 🎉
 
+## ScreenShorts
+<h2 align="left">Screenshots</h2>
+<h4 align="start">
+<img src="screenshots/screenshot1.jpeg" width="30%" vspace="10" hspace="10">
+<img src="screenshots/screenshot2.jpeg" width="30%" vspace="10" hspace="10">
+<img src="screenshots/screenshot3.jpeg" width="30%" vspace="10" hspace="10">
+<img src="screenshots/screenshot4.jpeg" width="30%" vspace="10" hspace="10">
+<img src="screenshots/screenshot5.jpeg" width="30%" vspace="10" hspace="10">
+<img src="screenshots/screenshot6.jpeg" width="30%" vspace="10" hspace="10">
+<br>
 
 ## Architecture
 
