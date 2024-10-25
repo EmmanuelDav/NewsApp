@@ -23,7 +23,7 @@ The idea is to keep the app super simple while demonstrating new libraries and t
 
 # Development Setup 🖥
 
-You will require latest version of Android Studio 5.0 (or newer) to be able to build the app
+You will require latest version of Android Studio 3.0 (or newer) to be able to build the app
 
 ## API key 🔑
 You'll need to provide API key to fetch the news from the News Service (API). Currently the news is fetched from [NewsAPI](https://newsapi.org/) 
@@ -31,7 +31,7 @@ You'll need to provide API key to fetch the news from the News Service (API). Cu
 - Generate an API key (It's only 2 steps!) from [NewsAPI](https://newsapi.org/)
 - Add the apiKey as a value in your `local.properties`
 ```
-    API_KEY = "<INSERT_YOUR_API_KEY>" (for testing use this API_KEY = "8b889b21e6f84dafafc7c17261870dca")
+    API_KEY = "<INSERT_YOUR_API_KEY>"
 ```
 - Build the app 
 - Good Luck 🎉
