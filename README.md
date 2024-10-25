@@ -31,13 +31,12 @@ You'll need to provide API key to fetch the news from the News Service (API). Cu
 - Generate an API key (It's only 2 steps!) from [NewsAPI](https://newsapi.org/)
 - Add the apiKey as a value in your `local.properties`
 ```
-    API_KEY = "<INSERT_YOUR_API_KEY>" for testing use this "8b889b21e6f84dafafc7c17261870dca"
+    API_KEY = "<INSERT_YOUR_API_KEY>" (for testing use this API_KEY = "8b889b21e6f84dafafc7c17261870dca")
 ```
 - Build the app 
-- Enjoyyyyy 🎉
+- Good Luck 🎉
 
-## ScreenShorts
-<h2 align="left">Screenshots</h2>
+<h2 align="left">ScreenShots</h2>
 <h4 align="start">
 <img src="screenshots/screenshot1.jpeg" width="30%" vspace="10" hspace="10">
 <img src="screenshots/screenshot2.jpeg" width="30%" vspace="10" hspace="10">
@@ -63,5 +62,10 @@ Some features that needs to be enhanced but didnt due to lack of time
 
 1) Pager Integration in Api response
 2) BackPress in SearchView
+3) Loading Animation
 
+## Author
+Emmanuel Iyke
 
+## License
+This project is licensed under the Apache License 2.0 - See: http://www.apache.org/licenses/LICENSE-2.0.txt
