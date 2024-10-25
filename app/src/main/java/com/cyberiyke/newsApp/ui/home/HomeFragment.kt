@@ -16,6 +16,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.cyberiyke.newsApp.R
 import com.cyberiyke.newsApp.databinding.FragmentHomeBinding
 import com.cyberiyke.newsApp.ui.MainActivity
@@ -65,25 +66,33 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         homeViewModel.article.observe(viewLifecycleOwner) { news ->
-            binding.rvPreachings.layoutManager = LinearLayoutManager(activity)
-            binding.rvPreachings.adapter = homeAdapter
-            if (news != null) homeAdapter.articles = news.toMutableList()
+            if (news.isNullOrEmpty()){
+                fetchArticles()
 
+                binding.swipeRefreshLayout.isRefreshing = true
+            }else{
+                binding.rvPreachings.layoutManager = LinearLayoutManager(activity)
+                binding.rvPreachings.adapter = homeAdapter
+                homeAdapter.articles = news.toMutableList()
+                binding.swipeRefreshLayout.isRefreshing = false
+
+            }
+
+        }
+
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            fetchArticles()
+
+            binding.swipeRefreshLayout.isRefreshing = true
         }
 
         homeViewModel.searchResults.observe(viewLifecycleOwner){ results ->
             binding.rvResults.layoutManager = LinearLayoutManager(activity)
             binding.rvResults.adapter = homeAdapter
 
-
             if (results != null) homeAdapter.setSearchResults(results.toMutableList())
 
         }
-
-        lifecycleScope.launch {
-            homeViewModel.fetchArticle("us", "science", "en", 20, 1)
-        }
-
 
         binding.searchView.addTransitionListener { searchView, previousState, newState ->
             when(newState){
@@ -94,9 +103,37 @@ class HomeFragment : Fragment() {
             }
         }
 
+        // Check if the RecyclerView is scrolled to the top
+        // Then refresh
+        binding.rvPreachings.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                val isAtTop = !recyclerView.canScrollVertically(-1)
+                // Enable swipe refresh only when the RecyclerView is at the top
+                binding.swipeRefreshLayout.isEnabled = isAtTop
+            }
+        })
+        binding.rvResults.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                val isAtTop = !recyclerView.canScrollVertically(-1)
+                // Enable swipe refresh only when the RecyclerView is at the top
+                binding.swipeRefreshLayout.isEnabled = isAtTop
+            }
+        })
+
+
+
         searchFromApi()
         setUpOnclickListener()
     }
+
+    private fun fetchArticles() {
+        lifecycleScope.launch {
+            homeViewModel.fetchArticle("us", "science", "en", 20, 1)
+            // Stop the refresh animation
+            binding.swipeRefreshLayout.isRefreshing = false
+        }
+    }
+
 
     private fun setUpOnclickListener(){
 

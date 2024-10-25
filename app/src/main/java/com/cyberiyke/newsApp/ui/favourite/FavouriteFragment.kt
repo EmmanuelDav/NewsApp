@@ -59,7 +59,10 @@ class FavouriteFragment : Fragment() {
             if (news != null) homeAdapter.articles = news.toMutableList()
 
         }
+
+        binding
         adapter()
+
     }
 
     override fun onDestroyView() {

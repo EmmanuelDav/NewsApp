@@ -50,8 +50,8 @@ class ArticleRepository @Inject constructor(
                          )
                      }
                      Timber.d("Inserting ${articleEntities.size} articles into the database")
-                     articleDao.clearNonFavoriteData()
-                     articleDao.insertArticle(articleEntities)
+                         articleDao.clearNonFavoriteData()
+                         articleDao.insertArticle(articleEntities)
                  }
              }
 
