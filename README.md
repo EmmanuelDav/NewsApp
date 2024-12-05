@@ -31,7 +31,7 @@ You'll need to provide API key to fetch the news from the News Service (API). Cu
 - Generate an API key (It's only 2 steps!) from [NewsAPI](https://newsapi.org/)
 - Add the apiKey as a value in your `local.properties`
 ```
-    API_KEY = "<INSERT_YOUR_API_KEY>"
+    API_KEY = <INSERT_YOUR_API_KEY>
 ```
 - Build the app 
 - Good Luck 🎉

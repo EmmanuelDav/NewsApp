@@ -49,7 +49,6 @@ class ArticleRepository @Inject constructor(
                              isFavorite = false
                          )
                      }
-                     Timber.d("Inserting ${articleEntities.size} articles into the database")
                          articleDao.clearNonFavoriteData()
                          articleDao.insertArticle(articleEntities)
                  }
@@ -103,7 +102,6 @@ class ArticleRepository @Inject constructor(
 
     // Fetch cached articles when offline
     fun getCachedArticles(): LiveData<List<ArticleEntity>> {
-        Timber.tag("meme").d("getCachedArticles: ${articleDao.getAllArticles().value}")
         return articleDao.getAllArticles()
     }
 

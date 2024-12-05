@@ -21,14 +21,11 @@ class HomeViewModel @Inject constructor(private val repository: ArticleRepositor
 
     var article = repository.getCachedArticles()
 
+    private var article =
+
     private val _searchResults = MutableLiveData<List<ArticleEntity>>() // search results
     val searchResults: LiveData<List<ArticleEntity>> get() = _searchResults
 
-    private val _isLoading = MutableLiveData<Boolean>()     // Loading state to track API call progress
-    val isLoading: LiveData<Boolean> = _isLoading
-
-    private val _errorMessage = MutableLiveData<String?>()     // Error handling state
-    val errorMessage: LiveData<String?>  = _errorMessage
 
 
 
