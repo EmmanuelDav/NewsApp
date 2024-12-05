@@ -23,11 +23,25 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    // Load API key from local.properties
-    val localProperties = Properties().apply {
-        load(file("../local.properties").inputStream())
+
+    val localPropertiesFile = rootProject.file("local.properties")
+    val localProperties = Properties()
+
+    if (localPropertiesFile.exists()) {
+        localProperties.load(localPropertiesFile.inputStream())
     }
+
     val apiKey = localProperties["API_KEY"]?.toString() ?: ""
+
+    if (apiKey.isEmpty()) {
+        throw GradleException("""
+        API_KEY is missing in local.properties. 
+        Please add your API key to the local.properties file as follows:
+
+        API_KEY=your_api_key_here
+        
+        If you don’t have an API key, visit https://newsapi.org/ to generate one. """)
+    }
 
 
     buildTypes {
