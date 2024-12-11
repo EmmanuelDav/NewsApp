@@ -84,6 +84,17 @@ class HomeFragment : Fragment() {
             binding.swipeRefreshLayout.isRefreshing = false
         }
 
+        adapter.onItemClickListener = { articleEntity ->
+            val bundle = Bundle().apply {
+                putString("url", articleEntity.articleUrl) // Pass the article URL
+            }
+            findNavController().navigate(R.id.action_navigation_home_to_newsItemFragment, bundle)
+        }
+
+        adapter.onFavoriteToggle = { articleId, isfavourited ->
+            homeViewModel.updateToggle(articleId, isfavourited)
+        }
+
 
 
         homeViewModel.searchResults.observe(viewLifecycleOwner){ results ->

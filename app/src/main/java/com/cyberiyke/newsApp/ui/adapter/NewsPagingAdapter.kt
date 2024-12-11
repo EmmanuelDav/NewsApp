@@ -12,6 +12,8 @@ import com.cyberiyke.newsApp.R
 import com.cyberiyke.newsApp.databinding.ItemNewsBinding
 import com.cyberiyke.newsApp.databinding.LayoutItemNewsSearchBinding
 import com.cyberiyke.newsApp.local.ArticleEntity
+import com.cyberiyke.newsApp.ui.favourite.FavouriteViewModel
+import com.cyberiyke.newsApp.ui.home.HomeViewModel
 
 class NewsPagingAdapter : PagingDataAdapter<ArticleEntity, NewsPagingAdapter.NewsViewHolder>(ArticleEntityComparator) {
 
