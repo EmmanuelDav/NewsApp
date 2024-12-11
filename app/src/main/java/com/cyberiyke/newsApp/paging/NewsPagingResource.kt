@@ -43,9 +43,9 @@ class NewsPagingResource @Inject constructor(private val apiService: ApiService,
         }catch (e: Exception){
             LoadResult.Error(e)
         }
-
-
     }
+
+
 
 
 }

@@ -79,6 +79,7 @@ dependencies {
     //Hilt
     implementation(libs.hilt.android)
     implementation(libs.androidx.swiperefreshlayout)
+    implementation(libs.androidx.paging.common.android)
     kapt(libs.hilt.android.compiler)
 
     // ViewModel

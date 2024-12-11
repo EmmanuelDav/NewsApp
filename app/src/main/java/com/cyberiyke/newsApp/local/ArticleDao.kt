@@ -1,6 +1,7 @@
 package com.cyberiyke.newsApp.local
 
 import androidx.lifecycle.LiveData
+import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -15,7 +16,7 @@ interface ArticleDao {
     suspend fun insertArticle(article: List<ArticleEntity>)
 
     @Query("SELECT * FROM favourite_article ORDER BY articleDateTime DESC")
-    fun getAllArticles(): LiveData<List<ArticleEntity>>
+    fun getPagedArticles(): PagingSource<Int, ArticleEntity>
 
     @Query("DELETE FROM favourite_article WHERE isFavorite = 0")     // Delete only non-favorited articles
     suspend fun clearNonFavoriteData()

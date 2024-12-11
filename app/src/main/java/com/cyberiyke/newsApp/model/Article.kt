@@ -17,6 +17,10 @@ data class NewsResponse(
 
 
 data class Article(
+
+    var pager : Int,
+
+
     @SerializedName("author")
     var author : String?,
 

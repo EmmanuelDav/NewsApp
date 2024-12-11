@@ -2,62 +2,41 @@ package com.cyberiyke.newsApp.repository
 
 import android.util.Log
 import androidx.lifecycle.LiveData
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.PagingSource
+import com.cyberiyke.newsApp.local.AppDatabase
 import com.cyberiyke.newsApp.local.ArticleDao
 import com.cyberiyke.newsApp.local.ArticleEntity
+import com.cyberiyke.newsApp.model.Article
 import com.cyberiyke.newsApp.network.ApiService
+import com.cyberiyke.newsApp.paging.NewsRemoteMediator
+import kotlinx.coroutines.flow.Flow
 import timber.log.Timber
 import javax.inject.Inject
 
 class ArticleRepository @Inject constructor(
     private val apiService: ApiService,
-    private val articleDao: ArticleDao
+    private val articleDao: ArticleDao,
+    private val database: AppDatabase
 ) {
 
      // here we are fetching articles from the api and caching them in room database
-    suspend fun getTopHeadlines(
-        country: String?,
-        category: String?,
-        language: String,
-        pageSize: Int,
-        page: Int
-    ){
+   fun getArticles(query: String): Flow<PagingData<Article>>{
+       val pagingSourceFactory = { articleDao.getAllArticles()}
 
-        // firstly fetch from API
-        val response =  apiService.getTopHeadline(
-            country,
-            category,
-            language,
-            null,
-            null,
-            pageSize,
-            page
-        )
+         return Pager(
+             config = PagingConfig(
+                 pageSize = 20,
+                 enablePlaceholders = false,
+                 prefetchDistance = 5
+             ),
 
-         // next we cache the fetched articles response into our database
-         try {
-             if (response.isSuccessful){
-                 response.body()?.let { newsResponse ->
-                     val articleEntities = newsResponse.articles.map { article ->
-                         ArticleEntity(
-                             articleTitle = article.title?:"",
-                             articleDescription = article.description?:"",
-                             articleUrl = article.url?:"",
-                             publisedAt = article.publishedAt?:"",
-                             articleDateTime = article.publishedAt?:"",
-                             articleUrlToImage = article.urlToImage?:"",
-                             articleSource = article.source.name,
-                             isFavorite = false
-                         )
-                     }
-                         articleDao.clearNonFavoriteData()
-                         articleDao.insertArticle(articleEntities)
-                 }
-             }
-
-         }catch (e: Exception){
-             Timber.e(e, "Error occurred while fetching articles")
-         }
-    }
+             remoteMediator = NewsRemoteMediator(apiService,database, query),
+             pagingSourceFactory = pagingSourceFactory
+         ).flow
+   }
 
 
 
