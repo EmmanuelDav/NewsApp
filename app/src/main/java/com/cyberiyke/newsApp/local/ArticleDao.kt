@@ -16,7 +16,7 @@ interface ArticleDao {
     suspend fun insertArticle(article: List<ArticleEntity>)
 
     @Query("SELECT * FROM favourite_article ORDER BY articleDateTime DESC")
-    fun getPagedArticles(): PagingSource<Int, ArticleEntity>
+    fun getAllArticles(): PagingSource<Int, ArticleEntity>
 
     @Query("DELETE FROM favourite_article WHERE isFavorite = 0")     // Delete only non-favorited articles
     suspend fun clearNonFavoriteData()

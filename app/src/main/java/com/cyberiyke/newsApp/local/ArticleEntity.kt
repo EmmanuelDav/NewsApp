@@ -9,6 +9,8 @@ data class ArticleEntity(
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0,
 
+    val pager :Int,
+
     var articleUrl: String = "",
     var articleTitle: String = "",
     var publisedAt: String= "",

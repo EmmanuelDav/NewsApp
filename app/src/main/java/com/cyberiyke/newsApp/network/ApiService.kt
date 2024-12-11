@@ -10,14 +10,9 @@ interface ApiService {
 
         @GET("/v2/top-headlines")
         suspend fun getTopHeadline(
-            @Query("country") country:String? = null,
-            @Query("category") category:String? = null,
-            @Query("language") language:String = "en",
-            @Query("sources") sources: String? = null,
-            @Query("q") keyword: String? = null,
-            @Query("pageSize") pageSize: Int = 20, // Added default value
-            @Query("page") page: Int = 1 // Added default value
-
+            @Query("q") query: String,
+            @Query("pageSize") pageSize: Int, // Added default value
+            @Query("page") page: Int, // Added default value
         ): retrofit2.Response<NewsResponse>
 
 
@@ -25,8 +20,8 @@ interface ApiService {
         @GET("/v2/everything")
         suspend fun getEveryThing(
             @Query("q") query: String,
-            @Query("pageSize") pageSize: Int = 20, // Added default value
-            @Query("page") page: Int = 1 // Added default value
+            @Query("pageSize") pageSize: Int , // Added default value
+            @Query("page") page: Int// Added default value
         ): retrofit2.Response<NewsResponse>
 
 }

@@ -4,11 +4,16 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.cyberiyke.newsApp.local.ArticleEntity
 import com.cyberiyke.newsApp.model.Article
 import com.cyberiyke.newsApp.repository.ArticleRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
@@ -18,22 +23,25 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(private val repository: ArticleRepository): ViewModel() {
 
+    private val searchQuery = MutableStateFlow("Binance") // Default search query
 
-    var article = repository.getCachedArticles()
 
-    private var article =
+
+    val article: Flow<PagingData<ArticleEntity>> = searchQuery
+        .flatMapLatest { query ->
+            repository.getArticles(query)
+        }
+        .cachedIn(viewModelScope)
 
     private val _searchResults = MutableLiveData<List<ArticleEntity>>() // search results
     val searchResults: LiveData<List<ArticleEntity>> get() = _searchResults
 
 
-
-
-    fun fetchArticle(country: String?, category: String, language: String, pageSize: Int?, page: Int?){
-        viewModelScope.launch {
-            repository.getTopHeadlines(country,category,language,pageSize!!,page!!)
-        }
+    fun setQuery(query: String) {
+        searchQuery.value = query
     }
+
+
 
     fun updateToggle(articleId:Int, isFavourite:Boolean){
         viewModelScope.launch(Dispatchers.IO) {
@@ -44,23 +52,16 @@ class HomeViewModel @Inject constructor(private val repository: ArticleRepositor
     // this function conducts the seatch based on users input
     fun searchArticles(
         query: String,
-        sources: String? = null,
-        from: String? = null,
-        language: String = "en",
-        sortBy: String = "publishedAt",
         pageSize: Int = 20,
         page: Int = 1
     ) {
         viewModelScope.launch {
-            _isLoading.value = true
             try {
-                val results = repository.searchArticles(query, sources, from, language, sortBy, pageSize, page)
+                val results = repository.searchArticles(query, pageSize, page)
                 _searchResults.value = results
             } catch (e: Exception) {
-                _errorMessage.value = "Failed to fetch articles: ${e.message}"
                 Timber.e(e, "Error during article search")
             } finally {
-                _isLoading.value = false
             }
         }
     }

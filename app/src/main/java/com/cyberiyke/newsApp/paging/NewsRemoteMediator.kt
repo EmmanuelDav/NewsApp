@@ -12,60 +12,61 @@ import com.cyberiyke.newsApp.network.ApiService
 import javax.inject.Inject
 
 @OptIn(ExperimentalPagingApi::class)
-class NewsRemoteMediator (
+class NewsRemoteMediator(
     private val apiService: ApiService,
     private val database: AppDatabase,
     private val query: String
-):RemoteMediator<Int, Article>() {
-
+) : RemoteMediator<Int, ArticleEntity>() {
 
     override suspend fun load(
         loadType: LoadType,
-        state: PagingState<Int, Article>
+        state: PagingState<Int, ArticleEntity>
     ): MediatorResult {
-        val page = when(loadType){
+        val page = when (loadType) {
             LoadType.REFRESH -> 1
-            LoadType.PREPEND -> return  MediatorResult.Success(endOfPaginationReached = true)
-            LoadType.APPEND ->{
-                val lastitem = state.lastItemOrNull() ?: return MediatorResult.Success(endOfPaginationReached = true)
-                lastitem.pager + 1
+            LoadType.PREPEND -> return MediatorResult.Success(endOfPaginationReached = true)
+            LoadType.APPEND -> {
+                val lastItem = state.lastItemOrNull()
+                    ?: return MediatorResult.Success(endOfPaginationReached = true)
+                lastItem.pager + 1
             }
-
-
         }
 
         return try {
-            val  response = apiService.getEveryThing(
+            val response = apiService.getEveryThing(
                 query = query,
                 pageSize = state.config.pageSize,
                 page = page
             )
 
+            val articles = response.body()?.articles ?: emptyList()
+
             database.withTransaction {
-                if (loadType == LoadType.REFRESH){
+                if (loadType == LoadType.REFRESH) {
+                    // Clear all non-favorite articles before inserting new ones
                     database.getArticleDao().clearNonFavoriteData()
-                }else{
-
-                    val articleEntities = response.body()?.articles?.map { article ->
-                        ArticleEntity(
-                            articleTitle = article.title?:"",
-                            articleDescription = article.description?:"",
-                            articleUrl = article.url?:"",
-                            publisedAt = article.publishedAt?:"",
-                            articleDateTime = article.publishedAt?:"",
-                            articleUrlToImage = article.urlToImage?:"",
-                            articleSource = article.source.name,
-                            isFavorite = false
-                        )
-                    }
-
-                    if (articleEntities != null) {
-                        database.getArticleDao().insertArticle(articleEntities)
-                    }
                 }
+
+                // Map API response to database entities
+                val articleEntities = articles.map { article ->
+                    ArticleEntity(
+                        id = article.url.hashCode(), // Generate unique ID based on URL
+                        articleTitle = article.title ?: "",
+                        articleDescription = article.description ?: "",
+                        articleUrl = article.url ?: "",
+                        articleDateTime = article.publishedAt ?: "",
+                        articleUrlToImage = article.urlToImage ?: "",
+                        articleSource = article.source.name,
+                        isFavorite = false,
+                        pager = page // Add page for pagination
+                    )
+                }
+
+                database.getArticleDao().insertArticle(articleEntities)
             }
-            MediatorResult.Success(endOfPaginationReached = response.body()?.articles!!.isEmpty())
-        }catch (e: Exception){
+
+            MediatorResult.Success(endOfPaginationReached = articles.isEmpty())
+        } catch (e: Exception) {
             MediatorResult.Error(e)
         }
     }

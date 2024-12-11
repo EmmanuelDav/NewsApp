@@ -4,15 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.cyberiyke.newsApp.R
 import com.cyberiyke.newsApp.databinding.FragmentFavouriteBinding
-import com.cyberiyke.newsApp.ui.adapter.ArticlesAdapter
-import com.cyberiyke.newsApp.ui.home.HomeFragment
+import com.cyberiyke.newsApp.ui.adapter.ArticleSearchAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -20,7 +18,7 @@ class FavouriteFragment : Fragment() {
 
     private var _binding: FragmentFavouriteBinding? = null
     private lateinit var favouriteViewModel:FavouriteViewModel
-    private lateinit var homeAdapter: ArticlesAdapter<FavouriteViewModel>
+    private lateinit var homeAdapter: ArticleSearchAdapter
 
 
 
@@ -42,7 +40,7 @@ class FavouriteFragment : Fragment() {
     }
 
     private fun adapter(){
-         homeAdapter = ArticlesAdapter(favouriteViewModel, {
+         homeAdapter = ArticleSearchAdapter(favouriteViewModel, {
             val bundle = Bundle().apply {
                 putString("url", it.articleUrl) // Pass the article URL
             }
@@ -56,11 +54,11 @@ class FavouriteFragment : Fragment() {
         favouriteViewModel.favourite.observe(viewLifecycleOwner) { news ->
             binding.rv.layoutManager = LinearLayoutManager(activity)
             binding.rv.adapter = homeAdapter
-            if (news != null) homeAdapter.articles = news.toMutableList()
-
+            if (news != null) {
+                homeAdapter.articles = news.toMutableList()
+            }
         }
 
-        binding
         adapter()
 
     }

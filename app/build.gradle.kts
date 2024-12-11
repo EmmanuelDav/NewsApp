@@ -100,8 +100,10 @@ dependencies {
     // Timber logging
     implementation (libs.timber)
 
-    //pager 3
+    //paging
     implementation (libs.androidx.paging.runtime)
+
+    implementation (libs.androidx.room.paging)
 
 
 

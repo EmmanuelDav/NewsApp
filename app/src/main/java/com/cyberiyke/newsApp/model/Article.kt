@@ -20,6 +20,8 @@ data class Article(
 
     var pager : Int,
 
+    var id: Int,
+
 
     @SerializedName("author")
     var author : String?,
