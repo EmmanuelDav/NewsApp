@@ -39,7 +39,7 @@ class FavouriteFragment : Fragment() {
         return root
     }
 
-    private fun adapter(){
+    private fun clickListener(){
          homeAdapter = ArticleSearchAdapter(favouriteViewModel, {
             val bundle = Bundle().apply {
                 putString("url", it.articleUrl) // Pass the article URL
@@ -59,7 +59,7 @@ class FavouriteFragment : Fragment() {
             }
         }
 
-        adapter()
+        clickListener()
 
     }
 

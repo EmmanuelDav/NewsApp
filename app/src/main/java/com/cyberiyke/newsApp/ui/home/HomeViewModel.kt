@@ -1,5 +1,6 @@
 package com.cyberiyke.newsApp.ui.home
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -60,7 +61,7 @@ class HomeViewModel @Inject constructor(private val repository: ArticleRepositor
                 val results = repository.searchArticles(query, pageSize, page)
                 _searchResults.value = results
             } catch (e: Exception) {
-                Timber.e(e, "Error during article search")
+                Log.d("TAG", "searchArticles: error ${e.message}")
             } finally {
             }
         }

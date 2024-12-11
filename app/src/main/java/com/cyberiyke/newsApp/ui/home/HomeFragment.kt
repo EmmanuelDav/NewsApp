@@ -93,7 +93,10 @@ class HomeFragment : Fragment() {
 
         adapter.onFavoriteToggle = { articleId, isfavourited ->
             homeViewModel.updateToggle(articleId, isfavourited)
+
         }
+
+        homeAdapter = ArticleSearchAdapter(homeViewModel)
 
 
 
@@ -148,21 +151,8 @@ class HomeFragment : Fragment() {
 
 
         searchFromApi()
-        setUpOnclickListener()
     }
 
-
-
-    private fun setUpOnclickListener(){
-
-//         homeAdapter = ArticleSearchAdapter( homeViewModel, {
-//
-//             val bundle = Bundle().apply {
-//                 putString("url", it.articleUrl) // Pass the article URL
-//             }
-//             findNavController().navigate(R.id.action_navigation_home_to_newsItemFragment, bundle)
-//         })
-    }
 
     private fun searchFromApi(){
         binding.searchView.editText.apply {
