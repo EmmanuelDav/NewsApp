@@ -1,4 +1,4 @@
-package com.cyberiyke.newsApp.data.local
+package com.cyberiyke.newsApp.local
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao

@@ -1,4 +1,4 @@
-package com.cyberiyke.newsApp.data.model
+package com.cyberiyke.newsApp.model
 
 import com.google.gson.annotations.SerializedName
 

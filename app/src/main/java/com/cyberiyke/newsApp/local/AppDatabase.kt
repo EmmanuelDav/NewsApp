@@ -1,4 +1,4 @@
-package com.cyberiyke.newsApp.data.local
+package com.cyberiyke.newsApp.local
 
 import androidx.room.Database
 import androidx.room.RoomDatabase

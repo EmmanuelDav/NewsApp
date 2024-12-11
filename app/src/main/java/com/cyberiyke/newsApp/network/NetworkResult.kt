@@ -1,4 +1,4 @@
-package com.cyberiyke.newsApp.data.network
+package com.cyberiyke.newsApp.network
 
 sealed class NetworkResult<T> {
     data class Success<T>(val data: T) : NetworkResult<T>()

@@ -1,10 +1,10 @@
-package com.cyberiyke.newsApp.data.repository
+package com.cyberiyke.newsApp.repository
 
 import android.util.Log
 import androidx.lifecycle.LiveData
-import com.cyberiyke.newsApp.data.local.ArticleDao
-import com.cyberiyke.newsApp.data.local.ArticleEntity
-import com.cyberiyke.newsApp.data.network.ApiService
+import com.cyberiyke.newsApp.local.ArticleDao
+import com.cyberiyke.newsApp.local.ArticleEntity
+import com.cyberiyke.newsApp.network.ApiService
 import timber.log.Timber
 import javax.inject.Inject
 

@@ -8,8 +8,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.cyberiyke.newsApp.R
-import com.cyberiyke.newsApp.data.local.ArticleEntity
-import com.cyberiyke.newsApp.data.model.Article
+import com.cyberiyke.newsApp.local.ArticleEntity
+import com.cyberiyke.newsApp.model.Article
 import com.cyberiyke.newsApp.databinding.LayoutItemNewsBinding
 import com.cyberiyke.newsApp.ui.favourite.FavouriteViewModel
 import com.cyberiyke.newsApp.ui.home.HomeViewModel

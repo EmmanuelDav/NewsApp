@@ -99,6 +99,10 @@ dependencies {
     // Timber logging
     implementation (libs.timber)
 
+    //pager 3
+    implementation (libs.androidx.paging.runtime)
+
+
 
     // Firebase Crashlytics
     implementation (libs.firebase.crashlytics)

@@ -1,4 +1,4 @@
-package com.cyberiyke.newsApp.data.local
+package com.cyberiyke.newsApp.local
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

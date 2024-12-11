@@ -3,9 +3,9 @@ package com.cyberiyke.newsApp.di
 import android.content.Context
 import android.util.Log
 import androidx.room.Room
-import com.cyberiyke.newsApp.data.local.AppDatabase
-import com.cyberiyke.newsApp.data.local.MIGRATION_1_2
-import com.cyberiyke.newsApp.data.network.ApiService
+import com.cyberiyke.newsApp.local.AppDatabase
+import com.cyberiyke.newsApp.local.MIGRATION_1_2
+import com.cyberiyke.newsApp.network.ApiService
 import com.google.firebase.crashlytics.BuildConfig
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import dagger.Module
@@ -29,7 +29,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideDatabase(@ApplicationContext  context: Context): AppDatabase{
+    fun provideDatabase(@ApplicationContext  context: Context): AppDatabase {
         return Room.databaseBuilder(context, AppDatabase::class.java, AppDatabase.DATABASE_NAME )
             .addMigrations(MIGRATION_1_2)
             .fallbackToDestructiveMigration()
@@ -100,7 +100,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideApiService(retrofit: Retrofit):ApiService{
+    fun provideApiService(retrofit: Retrofit): ApiService {
         return retrofit.create(ApiService::class.java)
     }
 }
