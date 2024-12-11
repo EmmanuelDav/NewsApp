@@ -58,10 +58,10 @@ Read more:
 
 ## TODO
 
-Some features that needs to be enhanced but didnt due to lack of time 
+Important 
 
-1) Pager Integration in Api response
-2) BackPress in SearchView
+1) Pager Integration in Api response (Added)
+2) BackPress in SearchView (Added)
 3) Loading Animation
 
 ## Author
