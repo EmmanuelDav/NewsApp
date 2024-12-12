@@ -3,6 +3,7 @@ package com.cyberiyke.newsApp.ui.home
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -20,13 +21,16 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.cyberiyke.newsApp.R
 import com.cyberiyke.newsApp.databinding.FragmentHomeBinding
+import com.cyberiyke.newsApp.network.NetworkResult
 import com.cyberiyke.newsApp.ui.MainActivity
 import com.cyberiyke.newsApp.ui.adapter.ArticleSearchAdapter
 import com.cyberiyke.newsApp.ui.adapter.NewsLoadStateAdapter
 import com.cyberiyke.newsApp.ui.adapter.NewsPagingAdapter
 import com.google.android.material.search.SearchView.TransitionState
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.observeOn
 import kotlinx.coroutines.launch
 
 
@@ -34,9 +38,6 @@ import kotlinx.coroutines.launch
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
-
-
-
 
     private val binding get() = _binding!!
     private lateinit var homeViewModel: HomeViewModel
@@ -83,6 +84,26 @@ class HomeFragment : Fragment() {
             adapter.refresh()
             binding.swipeRefreshLayout.isRefreshing = false
         }
+
+
+        lifecycleScope.launch {
+            homeViewModel.networkStatus.collect{ networkResult ->
+                when(networkResult){
+                    is NetworkResult.Idle ->{
+                        Log.d("TAG", "onViewCreated: Loading")
+                    }
+                    is NetworkResult.Failure -> {
+                        Log.d("TAG", "onViewCreated: error ${networkResult.message}")
+
+                    }
+                    is NetworkResult.Success ->{
+                        Log.d("TAG", "onViewCreated: Success")
+                    }
+                }
+            }
+        }
+
+
 
         adapter.onItemClickListener = { articleEntity ->
             val bundle = Bundle().apply {
@@ -147,9 +168,6 @@ class HomeFragment : Fragment() {
                 }
             }
         )
-
-
-
         searchFromApi()
     }
 

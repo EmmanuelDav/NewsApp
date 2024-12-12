@@ -13,8 +13,14 @@ import com.cyberiyke.newsApp.local.ArticleDao
 import com.cyberiyke.newsApp.local.ArticleEntity
 import com.cyberiyke.newsApp.model.Article
 import com.cyberiyke.newsApp.network.ApiService
+import com.cyberiyke.newsApp.network.NetworkResult
 import com.cyberiyke.newsApp.paging.NewsRemoteMediator
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onStart
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -23,25 +29,31 @@ import javax.inject.Inject
 class ArticleRepository @Inject constructor(
     private val apiService: ApiService,
     private val articleDao: ArticleDao,
-    private val database: AppDatabase
+    private val database: AppDatabase,
+    private val remoteMediator: NewsRemoteMediator
 ) {
 
-     // here we are fetching articles from the api and caching them in room database
-   fun getArticles(query: String): Flow<PagingData<ArticleEntity>>{
-       val pagingSourceFactory = {database.getArticleDao().getAllArticles()}
+    var networkResult: StateFlow<NetworkResult> = remoteMediator.networkResult
 
-         return Pager(
-             config = PagingConfig(
-                 pageSize = 10,
-                 enablePlaceholders = false
-             ),
+    // here we are fetching articles from the api and caching them in room database
+    fun getArticles(query: String): Flow<PagingData<ArticleEntity>> {
 
-             remoteMediator = NewsRemoteMediator(apiService,database, query),
-             pagingSourceFactory = pagingSourceFactory
-         ).flow
-   }
+        remoteMediator.query = query // Dynamically set the query
+
+        val pagingSourceFactory = { database.getArticleDao().getAllArticles() }
 
 
+
+        return Pager(
+            config = PagingConfig(
+                pageSize = 10,
+                enablePlaceholders = false
+            ),
+
+            remoteMediator = remoteMediator,
+            pagingSourceFactory = pagingSourceFactory
+        ).flow
+    }
 
 
     suspend fun searchArticles(
@@ -59,7 +71,7 @@ class ArticleRepository @Inject constructor(
                         articleTitle = article.title ?: "",
                         articleDescription = article.description ?: "",
                         articleUrl = article.url ?: "",
-                        publisedAt = article.publishedAt?:"",
+                        publisedAt = article.publishedAt ?: "",
                         articleDateTime = article.publishedAt ?: "",
                         articleUrlToImage = article.urlToImage ?: "",
                         articleSource = article.source.name,
@@ -78,16 +90,15 @@ class ArticleRepository @Inject constructor(
     }
 
 
-
-    suspend fun updateFavoriteStatus(articleId: Int, isFavourite:Boolean){
+    suspend fun updateFavoriteStatus(articleId: Int, isFavourite: Boolean) {
         articleDao.updateFavoriteStatus(articleId, isFavourite)
     }
 
-    fun getFavouriteArticle():LiveData<List<ArticleEntity>>{
+    fun getFavouriteArticle(): LiveData<List<ArticleEntity>> {
         return articleDao.getFavoriteArticles()
     }
 
-    suspend fun insertSingle(articleEntity: ArticleEntity){
+    suspend fun insertSingle(articleEntity: ArticleEntity) {
         articleDao.insertArticle(listOf(articleEntity))
     }
 

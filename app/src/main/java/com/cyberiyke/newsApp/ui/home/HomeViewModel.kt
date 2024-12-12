@@ -9,11 +9,14 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.cyberiyke.newsApp.local.ArticleEntity
 import com.cyberiyke.newsApp.model.Article
+import com.cyberiyke.newsApp.network.NetworkResult
 import com.cyberiyke.newsApp.repository.ArticleRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -26,13 +29,24 @@ class HomeViewModel @Inject constructor(private val repository: ArticleRepositor
 
     private val searchQuery = MutableStateFlow("Binance") // Default search query
 
-
-
     val article: Flow<PagingData<ArticleEntity>> = searchQuery
         .flatMapLatest { query ->
             repository.getArticles(query)
         }
         .cachedIn(viewModelScope)
+
+    private val _networkStatus = MutableStateFlow<NetworkResult>(NetworkResult.Idle)
+    val networkStatus = _networkStatus.asStateFlow()
+
+
+    init {
+        viewModelScope.launch {
+            repository.networkResult.collect { status ->
+                _networkStatus.value = status
+            }
+        }
+    }
+
 
     private val _searchResults = MutableLiveData<List<ArticleEntity>>() // search results
     val searchResults: LiveData<List<ArticleEntity>> get() = _searchResults

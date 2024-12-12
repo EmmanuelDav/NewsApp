@@ -6,6 +6,7 @@ import androidx.room.Room
 import com.cyberiyke.newsApp.local.AppDatabase
 import com.cyberiyke.newsApp.local.MIGRATION_1_2
 import com.cyberiyke.newsApp.network.ApiService
+import com.cyberiyke.newsApp.paging.NewsRemoteMediator
 import com.google.firebase.crashlytics.BuildConfig
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import dagger.Module
@@ -102,5 +103,14 @@ object AppModule {
     @Singleton
     fun provideApiService(retrofit: Retrofit): ApiService {
         return retrofit.create(ApiService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideNewsRemoteMediator(
+        apiService: ApiService,
+        database: AppDatabase
+    ): NewsRemoteMediator {
+        return NewsRemoteMediator(apiService, database)
     }
 }

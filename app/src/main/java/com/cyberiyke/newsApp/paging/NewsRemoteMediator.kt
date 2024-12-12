@@ -7,16 +7,22 @@ import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
 import com.cyberiyke.newsApp.local.AppDatabase
 import com.cyberiyke.newsApp.local.ArticleEntity
-import com.cyberiyke.newsApp.model.Article
 import com.cyberiyke.newsApp.network.ApiService
+import com.cyberiyke.newsApp.network.NetworkResult
+import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
 
+
 @OptIn(ExperimentalPagingApi::class)
-class NewsRemoteMediator(
+class NewsRemoteMediator @Inject constructor (
     private val apiService: ApiService,
     private val database: AppDatabase,
-    private val query: String
 ) : RemoteMediator<Int, ArticleEntity>() {
+
+    private val _networkResult = MutableStateFlow<NetworkResult>(NetworkResult.Idle)
+    var networkResult: MutableStateFlow<NetworkResult> = _networkResult
+
+    var query: String = ""
 
     override suspend fun load(
         loadType: LoadType,
@@ -32,25 +38,31 @@ class NewsRemoteMediator(
             }
         }
 
-        return try {
+        try {
+
             val response = apiService.getEveryThing(
                 query = query,
                 pageSize = state.config.pageSize,
                 page = page
             )
 
+
+            if (!response.isSuccessful) {
+                _networkResult.value = NetworkResult.Failure("Error because ${response.code()}")
+                return MediatorResult.Error(Exception("Error response: ${response.code()}"))
+            }
+
             val articles = response.body()?.articles ?: emptyList()
 
             database.withTransaction {
                 if (loadType == LoadType.REFRESH) {
-                    // Clear all non-favorite articles before inserting new ones
                     database.getArticleDao().clearNonFavoriteData()
                 }
 
                 // Map API response to database entities
                 val articleEntities = articles.map { article ->
                     ArticleEntity(
-                        id = article.url.hashCode(), // Generate unique ID based on URL
+                        id = article.url.hashCode(),
                         articleTitle = article.title ?: "",
                         articleDescription = article.description ?: "",
                         articleUrl = article.url ?: "",
@@ -58,16 +70,17 @@ class NewsRemoteMediator(
                         articleUrlToImage = article.urlToImage ?: "",
                         articleSource = article.source.name,
                         isFavorite = false,
-                        pager = page // Add page for pagination
+                        pager = page
                     )
                 }
-
                 database.getArticleDao().insertArticle(articleEntities)
             }
-
-            MediatorResult.Success(endOfPaginationReached = articles.isEmpty())
+            _networkResult.value = NetworkResult.Success
+            return MediatorResult.Success(endOfPaginationReached = articles.isEmpty())
         } catch (e: Exception) {
-            MediatorResult.Error(e)
+            _networkResult.value = NetworkResult.Failure("Error because ${e.cause}")
+            return MediatorResult.Error(e)
         }
+
     }
 }
