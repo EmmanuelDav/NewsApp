@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -26,6 +27,7 @@ import com.cyberiyke.newsApp.ui.MainActivity
 import com.cyberiyke.newsApp.ui.adapter.ArticleSearchAdapter
 import com.cyberiyke.newsApp.ui.adapter.NewsLoadStateAdapter
 import com.cyberiyke.newsApp.ui.adapter.NewsPagingAdapter
+import com.cyberiyke.newsApp.ui.dialog.ProgressDialog
 import com.google.android.material.search.SearchView.TransitionState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -45,8 +47,6 @@ class HomeFragment : Fragment() {
 
     private lateinit var homeAdapter: ArticleSearchAdapter
     private lateinit var adapter:NewsPagingAdapter
-
-
 
 
     override fun onCreateView(
@@ -85,24 +85,31 @@ class HomeFragment : Fragment() {
             binding.swipeRefreshLayout.isRefreshing = false
         }
 
+        val progressDialog = ProgressDialog(requireContext())
 
         lifecycleScope.launch {
             homeViewModel.networkStatus.collect{ networkResult ->
                 when(networkResult){
                     is NetworkResult.Idle ->{
                         Log.d("TAG", "onViewCreated: Loading")
+                        progressDialog.show()
                     }
                     is NetworkResult.Failure -> {
                         Log.d("TAG", "onViewCreated: error ${networkResult.message}")
-
+                        Toast.makeText(
+                            requireContext(),
+                            "Error: ${networkResult.message}",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        progressDialog.dismiss()
                     }
                     is NetworkResult.Success ->{
                         Log.d("TAG", "onViewCreated: Success")
+                        progressDialog.dismiss()
                     }
                 }
             }
         }
-
 
 
         adapter.onItemClickListener = { articleEntity ->
